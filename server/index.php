@@ -31,7 +31,7 @@ require_once "controllers/UsersController.php";
 try
 {
     // si $_GET['page'] est vide alors on charge simplement la page d'index
-    if (empty($_GET['page'])) //add comment or modification now delete
+    if (empty($_GET['page'])) 
     {
         $controller = new WelcomeController();
         $controller->index();

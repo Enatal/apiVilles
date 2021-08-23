@@ -15,7 +15,7 @@ abstract class Model
 
     // à compléter avec les infos de votre base de données
     private const HOST = 'localhost';
-    private const DB = 'mvc';
+    private const DB = 'apimvc';
     private const USER = 'root';
     private const PWD = '';
 
