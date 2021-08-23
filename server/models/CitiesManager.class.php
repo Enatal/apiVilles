@@ -6,48 +6,31 @@ class CitiesManager extends Model{
      private $cities;
 
      public function getCitiesByPostCode($code){
-        // Considering this project uses DB_MANAGER == MEEDOO
 
-        $cities=getDataBase()->select("villes_france","*",[
+        // Considering this project uses DB_MANAGER == MEEDOO
+        $cities=getDatabase()->select("villes_france","*",[
             "code_postal[=]" => $code
         ]);
         foreach ($cities as $city) {
-            # code...
+            $new_city=new City(
+                $city["id"],
+                $city["departement"],
+                $city["nom"],
+                $city["code_postal"],
+                $city["canton"],
+                $city["population"],
+                $city["densite"],
+                $city["surface"]
+            );
+            $this->cities[$new_city->getId()]=$new_city;
         }
-        $new_city=new City(
-            $city["id"],
-            $city["departement"],
-            $city["nom"],
-            $city["code_postale"],
-            $city["canton"],
-            $city["population"],
-            $city["densite"],
-            $city["surface"]
-        );
-
-        $this->cities[$new_city->getId()]=$new_city;
+        
      }
-
-     public function getPopulationByPostCode($code){
-
-        $population=array();
-        $this->getCityByPostCode($code);
-        foreach ($this->cities as $city) {
-            $population[]=$city->getPopulation();
-        }
-         return $population;
-     }
-
-     public function getAreaByPostCode($code){
-         
-        $city=$this->getCityByPostCode($code);
-        return $city->getArea();
-    }
 
     public function getCitiesByDept($dept){
-        // Considering this project uses DB_MANAGER == MEEDOO
 
-        $cities=$city=getDataBase()->select("villes_france","*",[
+        // Considering this project uses DB_MANAGER == MEEDOO
+        $cities=$city=getDatabase()->select("villes_france","*",[
             "departement[=]" => $dept
         ]);
         foreach ($cities as $city) {
@@ -55,7 +38,7 @@ class CitiesManager extends Model{
                 $city["id"],
                 $city["departement"],
                 $city["nom"],
-                $city["code_postale"],
+                $city["code_postal"],
                 $city["canton"],
                 $city["population"],
                 $city["densite"],
@@ -65,9 +48,40 @@ class CitiesManager extends Model{
         }
     }
 
+     public function getPopulationsByPostCode($code){
+
+        $populations=array();
+        $this->getCitiesByPostCode($code);
+        foreach ($this->cities as $city) {
+            $populations[]=$city->getPopulation();
+        }
+         return $populations;
+     }
+
+     public function getAreaByPostCode($code){
+         
+        $areas=array();
+        $this->getCitiesByPostCode($code);
+        foreach ($this->cities as $city) {
+            $areas[]=$city->getPopulation();
+        }
+         return $areas;
+    }
+
     public function getCitiesByCantonInDept($dept,$canton){
+
         $this->getCitiesByDept($dept);
-        $cities;
+        $cities=array();
+        foreach ($this->cities as $city) {
+            if($city->getCanton()==$canton){
+                $cities[]=$city;
+            }
+        }
+    }
+
+    public function UpdateCityByPostCode($code){
+        // reflechir à la solution pour 2 villes ou plus qui ont le même code postal
+        // Une selectCityToUpdate ?
     }
 }
 ?>

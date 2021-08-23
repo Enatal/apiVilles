@@ -22,6 +22,7 @@ require_once "helpers/string_helper.php";
 // inclusion des controllers
 require_once "controllers/WelcomeController.php";
 require_once "controllers/UsersController.php";
+require_once "controllers/CitiesController.php";
 
 
 /****** ROUTING *********/
@@ -41,7 +42,8 @@ try
 
         // on décompose le paramètre $_GET['page'] d'après le "/"
         $url = explode("/", filter_var($_GET['page'], FILTER_SANITIZE_URL));
-        switch ($url[0]) // on regarde le premier élément de la route
+        // on regarde le premier élément de la route
+        switch ($url[0]) 
         {
             // route "/simple"
             case "simple":
@@ -95,7 +97,16 @@ try
                 $controller = new UsersController();
                 $controller->display_user($id_user);
                 break;
-				
+			
+            // endpoint /ville/{code_postal}
+            case "ville":
+                if(array_key_exists(1,$url)){
+                    $controller = new CitiesController();
+                    $controller->outputCitiesByPostCode($url([1]));
+                }else{
+                    throw new Exception("requête incomplète");
+                }
+                break;
             // route chargée par défaut si aucune autre route n'a été chargée
             default:
                 throw new Exception("La page n'existe pas");
