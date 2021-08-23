@@ -8,9 +8,10 @@ class CitiesManager extends Model{
      public function getCitiesByPostCode($code){
 
         // Considering this project uses DB_MANAGER == MEEDOO
-        $cities=getDatabase()->select("villes_france","*",[
-            "code_postal[=]" => $code
+        $cities=$this->getDatabase()->select("villes_france","*",[
+            "code_postal" => $code
         ]);
+        var_dump($cities);
         foreach ($cities as $city) {
             $new_city=new City(
                 $city["id"],
@@ -24,14 +25,16 @@ class CitiesManager extends Model{
             );
             $this->cities[$new_city->getId()]=$new_city;
         }
+        var_dump($this->cities);
+        return $this->cities;
         
      }
 
     public function getCitiesByDept($dept){
 
         // Considering this project uses DB_MANAGER == MEEDOO
-        $cities=$city=getDatabase()->select("villes_france","*",[
-            "departement[=]" => $dept
+        $cities=$city=$this->getDatabase()->select("villes_france","*",[
+            "departement" => $dept
         ]);
         foreach ($cities as $city) {
             $new_city=new City(
@@ -46,6 +49,7 @@ class CitiesManager extends Model{
             );
             $this->cities[$new_city->getId()]=$new_city;
         }
+        return $this->cities;
     }
 
      public function getPopulationsByPostCode($code){
