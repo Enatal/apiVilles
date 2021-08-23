@@ -102,7 +102,7 @@ try
             case "ville":
                 if(array_key_exists(1,$url)){
                     $controller = new CitiesController();
-                    $controller->outputCitiesByPostCode($url([1]));
+                    $controller->outputCitiesByPostCode($url[1]);
                 }else{
                     throw new Exception("requête incomplète");
                 }
