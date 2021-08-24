@@ -69,4 +69,8 @@ class WelcomeController
         echo json_encode($result);
     }
 
+    public function testPost(){
+         require_once ("Tests/post.php");
+    }
+
 }

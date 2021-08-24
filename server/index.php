@@ -166,6 +166,10 @@ try
                             throw new Exception("requête incomplète");
                         }
                         break;
+                        case 'post.php' :
+                            $controller = new WelcomeController();
+                            $controller->testPost();
+                            break;
                 // route chargée par défaut si aucune autre route n'a été chargée
                     default:
                         throw new Exception("La page n'existe pas");
@@ -174,10 +178,30 @@ try
             break;
 
         case 'POST':
+            // si $_GET['page'] est vide alors on charge simplement la page d'index
+            if (empty($_GET['page'])) 
+            {
+                throw new Exception ("aucun endpoint défini");
+            }
+            else // sinon on traite au cas par cas nos routes
+            {
+                // on décompose le paramètre $_GET['page'] d'après le "/"
+                $url = explode("/", filter_var($_GET['page'], FILTER_SANITIZE_URL));
+                // on regarde le premier élément de la route
+                switch ($url[0]) 
+                {
+                    case "ville":
+                        $controller = new CitiesController();
+                        $controller = recordNewCity($_POST);
+                        break;
+                    default :
+                    throw new Exception ("mauvaise requete");
+                }
+            }
             break;
 
         case 'PUT':
-            
+
             break;
 
         case 'DELETE':

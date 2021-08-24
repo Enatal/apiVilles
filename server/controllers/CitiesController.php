@@ -46,6 +46,10 @@ class CitiesController{
         echo json_encode($cities);
   
     }
+    public function recordNewCity($posts){
+        $result = $this->cityManager->addNewCity($posts);
+        echo json_encode($result->rowCount());
+    }
 
 
 }
