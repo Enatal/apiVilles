@@ -9,7 +9,7 @@ class CitiesManager extends Model{
 
         // Considering this project uses DB_MANAGER == MEEDOO
         $cities=$this->getDatabase()->select("villes_france","*",[
-            "code_postal[~]" => $code
+            "code_postal[~]" => hmlspecialchars($code)
         ]);
         //var_dump($cities);
         foreach ($cities as $city) {
@@ -32,7 +32,7 @@ class CitiesManager extends Model{
 
         // Considering this project uses DB_MANAGER == MEEDOO
         $cities=$city=$this->getDatabase()->select("villes_france","*",[
-            "departement" => $dept
+            "departement" => htmlspecialchars($dept)
         ]);
         foreach ($cities as $city) {
             $new_city=new City(
@@ -84,13 +84,16 @@ class CitiesManager extends Model{
         return $cities;
     }
 
-    public function addNewCity(){
-        
+    public function addNewCity($posts){
+        $result=$this->getDatabase()->insert("villes_france",[
+            "departement" => $posts["dept"],
+
+        ]);
     }
 
     public function updateCityByPostCode($code,$id){
         // reflechir à la solution pour 2 villes ou plus qui ont le même code postal
-        // Un selectCityToUpdate avant ?
+        // Un selectCityToUpdate avant ? pour obtenir l'id
     }
 }
 ?>
