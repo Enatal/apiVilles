@@ -33,5 +33,20 @@ class CitiesController{
 
     }
 
+    public function outputCitiesByDept($dept){
+
+        $cities=$this->cityManager->getCitiesByDept($dept);
+        echo json_encode($cities);
+  
+    }
+
+    public function getCitiesByCantonInDept($dept,$canton){
+
+        $cities=$this->cityManager->getCitiesByCantonInDept($dept,$canton);
+        echo json_encode($cities);
+  
+    }
+
+
 }
 ?>

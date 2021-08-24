@@ -45,7 +45,7 @@ class CitiesManager extends Model{
                 $city["densite"],
                 $city["surface"]
             );
-            $this->cities[$new_city->getId()]=$new_city->toJson();
+            $this->cities[$new_city->getId()]=$new_city->_toJson();
         }
         return $this->cities;
     }
@@ -77,13 +77,18 @@ class CitiesManager extends Model{
         $this->getCitiesByDept($dept);
         $cities=array();
         foreach ($this->cities as $city) {
-            if($city->getCanton()==$canton){
-                $cities[]=$city;
+            if($city["canton"]==$canton){
+                $cities[$city["id"]]=$city;
             }
         }
+        return $cities;
     }
 
-    public function UpdateCityByPostCode($code){
+    public function addNewCity(){
+        
+    }
+
+    public function updateCityByPostCode($code,$id){
         // reflechir à la solution pour 2 villes ou plus qui ont le même code postal
         // Un selectCityToUpdate avant ?
     }

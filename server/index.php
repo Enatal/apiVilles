@@ -31,100 +31,104 @@ require_once "controllers/CitiesController.php";
 // on va donc gérer notre routage depuis le paramètre $_GET["page"]
 try
 {
-    // si $_GET['page'] est vide alors on charge simplement la page d'index
-    if (empty($_GET['page'])) 
-    {
-        $controller = new WelcomeController();
-        $controller->index();
-    }
-    else // sinon on traite au cas par cas nos routes
-    {
 
-        // on décompose le paramètre $_GET['page'] d'après le "/"
-        $url = explode("/", filter_var($_GET['page'], FILTER_SANITIZE_URL));
-        // on regarde le premier élément de la route
-        switch ($url[0]) 
-        {
-            // route "/simple"
-            case "simple":
-                $controller = new WelcomeController();
-                $controller->simple();
-                break;
-
-            // routes "/index" ou "/home", si plusieurs routes ont le même résultat on peut les enchainer comme ça
-            case "index":
-            case "home":
+    $request_method = $_SERVER["REQUEST_METHOD"];
+    // analyse de la methode de requête
+    switch ($request_method) {
+        case 'GET':
+            // si $_GET['page'] est vide alors on charge simplement la page d'index
+            if (empty($_GET['page'])) 
+            {
                 $controller = new WelcomeController();
                 $controller->index();
-                break;
+            }
+            else // sinon on traite au cas par cas nos routes
+            {
+                // on décompose le paramètre $_GET['page'] d'après le "/"
+                $url = explode("/", filter_var($_GET['page'], FILTER_SANITIZE_URL));
+                // on regarde le premier élément de la route
+                switch ($url[0]) 
+                {
+                    // route "/simple"
+                    case "simple":
+                        $controller = new WelcomeController();
+                        $controller->simple();
+                        break;
 
-            // route "/elements"
-            case "elements":
-                $controller = new WelcomeController();
-                $controller->elements();
-                break;
+                    // routes "/index" ou "/home", si plusieurs routes ont le même résultat on peut les enchainer comme ça
+                    case "index":
+                    case "home":
+                        $controller = new WelcomeController();
+                        $controller->index();
+                        break;
 
-            // route "/generic"
-            case "generic":
-                $controller = new WelcomeController();
-                $controller->generic();
-                break;
+                    // route "/elements"
+                    case "elements":
+                        $controller = new WelcomeController();
+                        $controller->elements();
+                        break;
 
-            // route "/generic2", il s'agit du même resultat que "/generic" mais avec une
-            // vue décomposée en header/navbar/footer
-            case "generic2":
-                $controller = new WelcomeController();
-                $controller->generic2();
-                break;
+                    // route "/generic"
+                    case "generic":
+                        $controller = new WelcomeController();
+                        $controller->generic();
+                        break;
 
-            // route "/testjson", par exemple réponse à un appel AJAX
-            case "testjson":
-                $controller = new WelcomeController();
-                $controller->testjson();
-                break;
+                    // route "/generic2", il s'agit du même resultat que "/generic" mais avec une
+                    // vue décomposée en header/navbar/footer
+                    case "generic2":
+                        $controller = new WelcomeController();
+                        $controller->generic2();
+                        break;
 
-            // route "/allusers", qui utilise le modèle et la base de données
-            case "allusers":
-                // à noter qu'ici on a fait le choix d'utiliser un autre controller
-                $controller = new UsersController();
-                $controller->display_all_users();
-                break;
+                    // route "/testjson", par exemple réponse à un appel AJAX
+                    case "testjson":
+                        $controller = new WelcomeController();
+                        $controller->testjson();
+                        break;
 
-			// route "/user/(:number)", qui utilise le modèle et la base de données (exemple : /user/1)
-            case "user":
-                // on récupère ensuite l'id du user
-				$id_user = $url[1] ; // on peut rajouter des vérifications, notamment si l'id n'est pas un nombre ou si l'url est mal formée
-                $controller = new UsersController();
-                $controller->display_user($id_user);
-                break;
-			
-            // endpoint /ville/{code_postal}
-            case "ville":
-                if(array_key_exists(1,$url)){
-                    if(count(str_split($url[1]))==5 && is_numeric($url[1])){
-                        $controller = new CitiesController();
-                        $controller->outputCitiesByPostCode($url[1]);
-                    }else{
-                        throw new Exception("le code postal est composé de 5 chiffres");
-                    }
-                }else{
-                    throw new Exception("requête incomplète");
-                }
-                break;
+                    // route "/allusers", qui utilise le modèle et la base de données
+                    case "allusers":
+                        // à noter qu'ici on a fait le choix d'utiliser un autre controller
+                        $controller = new UsersController();
+                        $controller->display_all_users();
+                        break;
 
-                // endpoint /population/{code_postal}
-                case "population":
-                    if(array_key_exists(1,$url)){
-                        if(count(str_split($url[1]))==5 && is_numeric($url[1])){
-                            $controller = new CitiesController();
-                            $controller->outputPopulationsByPostCode($url[1]);
+                    // route "/user/(:number)", qui utilise le modèle et la base de données (exemple : /user/1)
+                    case "user":
+                        // on récupère ensuite l'id du user
+                        $id_user = $url[1] ; // on peut rajouter des vérifications, notamment si l'id n'est pas un nombre ou si l'url est mal formée
+                        $controller = new UsersController();
+                        $controller->display_user($id_user);
+                        break;
+                    
+                    // endpoint /ville/{code_postal}
+                    case "ville":
+                        if(array_key_exists(1,$url)){
+                            if(count(str_split($url[1]))==5 && is_numeric($url[1])){
+                                $controller = new CitiesController();
+                                $controller->outputCitiesByPostCode($url[1]);
+                            }else{
+                                throw new Exception("le code postal est composé de 5 chiffres");
+                            }
                         }else{
-                            throw new Exception("le code postal est composé de 5 chiffres");
+                            throw new Exception("requête incomplète");
                         }
-                    }else{
-                        throw new Exception("requête incomplète");
-                    }
-                    break;
+                        break;
+
+                    // endpoint /population/{code_postal}
+                    case "population":
+                        if(array_key_exists(1,$url)){
+                            if(count(str_split($url[1]))==5 && is_numeric($url[1])){
+                                $controller = new CitiesController();
+                                $controller->outputPopulationsByPostCode($url[1]);
+                            }else{
+                                throw new Exception("le code postal est composé de 5 chiffres");
+                            }
+                        }else{
+                            throw new Exception("requête incomplète");
+                        }
+                        break;
 
                     // endpoint /superficie/{code_postal}
                     case "superficie":
@@ -139,11 +143,51 @@ try
                             throw new Exception("requête incomplète");
                         }
                         break;
-            // route chargée par défaut si aucune autre route n'a été chargée
-            default:
-                throw new Exception("La page n'existe pas");
-        }
+
+                        // endpoint /villes/{code_departement} et :villes/{code_departement/code_canton}
+                    case "villes":
+                        if(array_key_exists(1,$url)){
+                            if(array_key_exists(2,$url)){
+                                if(count(str_split($url[2]))==2 && is_numeric($url[2])){
+                                    $controller = new CitiesController();
+                                    $controller->getCitiesByCantonInDept($url[1],$url[2]);
+                                }else{
+                                    throw new Exception("le code du canton est composé de 2 chiffres");
+                                }
+                            }else{
+                                if(count(str_split($url[1]))>=2 && count(str_split($url[1]))<=3 && is_numeric($url[1])){
+                                    $controller = new CitiesController();
+                                    $controller->outputCitiesByDept($url[1]);
+                                }else{
+                                    throw new Exception("le code du departement est composé de 2 ou 3 chiffres");
+                                }
+                            }
+                        }else{
+                            throw new Exception("requête incomplète");
+                        }
+                        break;
+                // route chargée par défaut si aucune autre route n'a été chargée
+                    default:
+                        throw new Exception("La page n'existe pas");
+                }
+            }
+            break;
+
+        case 'POST':
+            break;
+
+        case 'PUT':
+            
+            break;
+
+        case 'DELETE':
+            break;
+
+        default:
+            header("HTTP/1.0 405 Method Not Allowed");
+            break;
     }
+   
 } catch (Exception $e) {
     // en cas d'exeption l
     echo $e->getMessage();
