@@ -10,13 +10,13 @@ class City extends Model{
     private $density;
     private $area;
 
-    public function __constuct($id,$dept,$name,$postcode,$canton,$pop,$density,$area){
+    public function __construct($id,$dept,$name,$postcode,$canton,$pop,$density,$area){
         $this->id=$id;
         $this->dept=$dept;
         $this->cityName=$name;
         $this->postCode=$postcode;
         $this->canton=$canton;
-        $this->population->$pop;
+        $this->population=$pop;
         $this->density=$density;
         $this->area=$area;
     }
@@ -75,6 +75,10 @@ class City extends Model{
     }
     public function setArea($area){
         $this->area=$area;
+    }
+
+    public function _toJson(){
+       return get_object_vars($this);
     }
 }
 ?>

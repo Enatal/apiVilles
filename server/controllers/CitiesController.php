@@ -14,10 +14,23 @@ class CitiesController{
     // méthode appelée par l'endpoint GET /ville/{code_postal}
     public function outputCitiesByPostCode($code){
 
-        $this->cityManager->getCitiesByPostCode($code);
-        echo json_encode($this->cityManager->cities);
+        $cities=$this->cityManager->getCitiesByPostCode($code);
+        echo json_encode($cities);
+  
+    }
 
-        require_once("views/cities.php");
+    public function outputPopulationsByPostCode($code){
+
+        $cities=$this->cityManager->getPopulationsByPostCode($code);
+        echo json_encode($cities,JSON_FORCE_OBJECT);
+
+    }
+
+    public function outputAreasByPostCode($code){
+
+        $cities=$this->cityManager-> getAreasByPostCode($code);
+        echo json_encode($cities,JSON_FORCE_OBJECT);
+
     }
 
 }

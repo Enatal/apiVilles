@@ -8,9 +8,10 @@ class CitiesManager extends Model{
      public function getCitiesByPostCode($code){
 
         // Considering this project uses DB_MANAGER == MEEDOO
-        $cities=getDatabase()->select("villes_france","*",[
-            "code_postal[=]" => $code
+        $cities=$this->getDatabase()->select("villes_france","*",[
+            "code_postal[~]" => $code
         ]);
+        //var_dump($cities);
         foreach ($cities as $city) {
             $new_city=new City(
                 $city["id"],
@@ -22,16 +23,16 @@ class CitiesManager extends Model{
                 $city["densite"],
                 $city["surface"]
             );
-            $this->cities[$new_city->getId()]=$new_city;
+            $this->cities[$new_city->getId()]= $new_city->_toJson();
         }
-        
+        return $this->cities;
      }
 
     public function getCitiesByDept($dept){
 
         // Considering this project uses DB_MANAGER == MEEDOO
-        $cities=$city=getDatabase()->select("villes_france","*",[
-            "departement[=]" => $dept
+        $cities=$city=$this->getDatabase()->select("villes_france","*",[
+            "departement" => $dept
         ]);
         foreach ($cities as $city) {
             $new_city=new City(
@@ -44,26 +45,29 @@ class CitiesManager extends Model{
                 $city["densite"],
                 $city["surface"]
             );
-            $this->cities[$new_city->getId()]=$new_city;
+            $this->cities[$new_city->getId()]=$new_city->toJson();
         }
+        return $this->cities;
     }
 
      public function getPopulationsByPostCode($code){
 
         $populations=array();
         $this->getCitiesByPostCode($code);
-        foreach ($this->cities as $city) {
-            $populations[]=$city->getPopulation();
+        if($this->cities !=NULL){
+            foreach ($this->cities as $city) {
+            $populations[$city["id"]]=array("population" => $city["population"]);
+            }
         }
          return $populations;
      }
 
-     public function getAreaByPostCode($code){
+     public function getAreasByPostCode($code){
          
         $areas=array();
         $this->getCitiesByPostCode($code);
         foreach ($this->cities as $city) {
-            $areas[]=$city->getPopulation();
+            $areas[$city["id"]]=array("area" => $city["area"]);
         }
          return $areas;
     }
@@ -81,7 +85,7 @@ class CitiesManager extends Model{
 
     public function UpdateCityByPostCode($code){
         // reflechir à la solution pour 2 villes ou plus qui ont le même code postal
-        // Une selectCityToUpdate ?
+        // Un selectCityToUpdate avant ?
     }
 }
 ?>

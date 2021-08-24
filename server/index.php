@@ -101,12 +101,44 @@ try
             // endpoint /ville/{code_postal}
             case "ville":
                 if(array_key_exists(1,$url)){
-                    $controller = new CitiesController();
-                    $controller->outputCitiesByPostCode($url[1]);
+                    if(count(str_split($url[1]))==5 && is_numeric($url[1])){
+                        $controller = new CitiesController();
+                        $controller->outputCitiesByPostCode($url[1]);
+                    }else{
+                        throw new Exception("le code postal est composé de 5 chiffres");
+                    }
                 }else{
                     throw new Exception("requête incomplète");
                 }
                 break;
+
+                // endpoint /population/{code_postal}
+                case "population":
+                    if(array_key_exists(1,$url)){
+                        if(count(str_split($url[1]))==5 && is_numeric($url[1])){
+                            $controller = new CitiesController();
+                            $controller->outputPopulationsByPostCode($url[1]);
+                        }else{
+                            throw new Exception("le code postal est composé de 5 chiffres");
+                        }
+                    }else{
+                        throw new Exception("requête incomplète");
+                    }
+                    break;
+
+                    // endpoint /superficie/{code_postal}
+                    case "superficie":
+                        if(array_key_exists(1,$url)){
+                            if(count(str_split($url[1]))==5 && is_numeric($url[1])){
+                                $controller = new CitiesController();
+                                $controller->outputAreasByPostCode($url[1]);
+                            }else{
+                                throw new Exception("le code postal est composé de 5 chiffres");
+                            }
+                        }else{
+                            throw new Exception("requête incomplète");
+                        }
+                        break;
             // route chargée par défaut si aucune autre route n'a été chargée
             default:
                 throw new Exception("La page n'existe pas");
