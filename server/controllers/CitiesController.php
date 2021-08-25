@@ -15,6 +15,7 @@ class CitiesController{
     public function outputCitiesByPostCode($code){
 
         $cities=$this->cityManager->getCitiesByPostCode($code);
+<<<<<<< HEAD
         echo json_encode($cities);
   
     }
@@ -30,6 +31,10 @@ class CitiesController{
 
         $cities=$this->cityManager-> getAreasByPostCode($code);
         echo json_encode($cities,JSON_FORCE_OBJECT);
+=======
+        var_dump($cities);
+        echo json_encode($cities);
+>>>>>>> 93382c091b2fbe2d8ab788bed10c9e36b173172c
 
     }
 
