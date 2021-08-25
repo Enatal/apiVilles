@@ -85,16 +85,44 @@ class CitiesManager extends Model{
     }
 
     public function addNewCity($posts){
-        $result=$this->getDatabase()->insert("villes_france",[
-            "departement" => $posts["dept"],
-            "nom" => $posts["cityName"],
-            "code_postal" => $posts["postCode"],
-            "canton" => $posts["canton"],
-            "population" => $posts["population"],
-            "densite" => $posts["density"],
-            "surface" => $posts["area"]
-        ]);
-        return $result;
+        $keys=[
+            "dept",
+            "cityName",
+            "postCode",
+            "canton",
+            "population",
+            "density",
+            "area"
+        ];
+            if(!exists($posts,$keys)){
+                throw new Exception(" Un des champs (cityName, postCode, dept, canton, population, density, area) n'existe pas, à noter qu'il peuvent être vide, mais doivent exister");
+            }else{
+                if (empty($posts["cityName"]) && empty($posts["postCode"]) && empty($posts["dept"])) {
+                    throw new Exception ("le nom, le code postal et le departement sont nécessaires à l'enregistrement");
+                }else{
+                    $result=$this->getDatabase()->select("villes_france",[
+                        "nom",
+                        "code_postal"
+                        ],[
+                        "nom" => $posts["cityName"],
+                        "code_postal" => $posts["postCode"]
+                        ]);
+                    if($result){
+                        throw new Exception ("Cet enregistrement existe déjà");
+                    }else{
+                        $result=$this->getDatabase()->insert("villes_france",[
+                            "departement" => $posts["dept"],
+                            "nom" => $posts["cityName"],
+                            "code_postal" => $posts["postCode"],
+                            "canton" => $posts["canton"],
+                            "population" => $posts["population"],
+                            "densite" => $posts["density"],
+                            "surface" => $posts["area"]
+                        ]);
+                        return $result;
+                    }
+                }
+            }
     }
 
     public function updateCityByPostCode($code,$id){

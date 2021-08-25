@@ -19,6 +19,7 @@ define("FULL_URL", str_replace("index.php", "", (isset($_SERVER['HTTPS']) ? "htt
 include_once ("./librairies/medoo/Medoo.php");
 // on charge le fichier qui contient les fonctions supplémentaires qu'on va utiliser dans la vue
 require_once "helpers/string_helper.php";
+require_once "helpers/exists_helper.php";
 // inclusion des controllers
 require_once "controllers/WelcomeController.php";
 require_once "controllers/UsersController.php";
@@ -192,7 +193,7 @@ try
                 {
                     case "ville":
                         $controller = new CitiesController();
-                        $controller = recordNewCity($_POST);
+                        $controller->recordNewCity($_POST);
                         break;
                     default :
                     throw new Exception ("mauvaise requete");

@@ -1,7 +1,6 @@
 <?php
-  $url = 'http://127.0.0.1/apiVilles/ville';
+  $url = 'http://127.0.0.1/apiVilles/server/ville';
   $data = array('dept' => '83', 'cityName' => 'Gothamcity', 'postCode' => '83601', 'canton' => '22', 'population' => '1', 'density' =>'50', 'area' =>'50');
-  // utilisez 'http' même si vous envoyez la requête sur https:// ...
   $options = array(
     'http' => array(
       'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
