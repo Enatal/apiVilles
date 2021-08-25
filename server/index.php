@@ -203,7 +203,38 @@ try
 
         case 'PUT':
 
-            break;
+             // si $_GET['page'] est vide alors on charge simplement la page d'index
+             if (empty($_GET['page'])) 
+             {
+                 throw new Exception ("aucun endpoint défini");
+             }
+             else // sinon on traite au cas par cas nos routes
+             {
+                 // on décompose le paramètre $_GET['page'] d'après le "/"
+                 $url = explode("/", filter_var($_GET['page'], FILTER_SANITIZE_URL));
+                 // on regarde le premier élément de la route
+                 switch ($url[0]) 
+                 {
+                     case "ville":
+                        if(array_key_exists(1,$url)){
+                            if(count(str_split($url[1]))==5 && is_numeric($url[1])){
+                                $_PUT = array();
+                                parse_str(file_get_contents('php://input'), $_PUT);
+                                $controller = new CitiesController();
+                                $controller->ModifyCitiesByPostCode($url[1],$_PUT);
+                            }else{
+                                throw new Exception("le code postal est composé de 5 chiffres");
+                            }
+                        }else{
+                            throw new Exception("requête incomplète");
+                        }
+                         break;
+                     default :
+                     throw new Exception ("mauvaise requete");
+                 }
+             }
+             break;
+ 
 
         case 'DELETE':
             break;

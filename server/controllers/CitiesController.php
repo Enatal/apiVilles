@@ -52,6 +52,11 @@ class CitiesController{
         echo json_encode($result->rowCount());
     }
 
+    public function ModifyCitiesByPostCode($code){
 
+        $cities=$this->cityManager-> updateCityWithPostCode($code);
+        echo json_encode($cities);
+
+    }
 }
 ?>

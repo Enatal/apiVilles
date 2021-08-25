@@ -4,11 +4,21 @@ require_once "City.class.php";
 
 class CitiesManager extends Model{
      private $cities;
+     private $table = "villes_france";
+     private $keys=[
+        "dept",
+        "cityName",
+        "postCode",
+        "canton",
+        "population",
+        "density",
+        "area"
+    ];
 
      public function getCitiesByPostCode($code){
 
         // Considering this project uses DB_MANAGER == MEEDOO
-        $cities=$this->getDatabase()->select("villes_france","*",[
+        $cities=$this->getDatabase()->select($this->table,"*",[
             "code_postal[~]" => htmlspecialchars($code)
         ]);
         //var_dump($cities);
@@ -32,7 +42,7 @@ class CitiesManager extends Model{
     public function getCitiesByDept($dept){
 
         // Considering this project uses DB_MANAGER == MEEDOO
-        $cities=$city=$this->getDatabase()->select("villes_france","*",[
+        $cities=$city=$this->getDatabase()->select($this->table,"*",[
 
             "departement" => htmlspecialchars($dept)
 
@@ -88,32 +98,24 @@ class CitiesManager extends Model{
     }
 
     public function addNewCity($posts){
-        $keys=[
-            "dept",
-            "cityName",
-            "postCode",
-            "canton",
-            "population",
-            "density",
-            "area"
-        ];
-            if(!exists($posts,$keys)){
+
+            if(!exists($posts,$this->keys)){
                 throw new Exception(" Un des champs (cityName, postCode, dept, canton, population, density, area) n'existe pas, à noter qu'il peuvent être vide, mais doivent exister");
             }else{
-                if (empty($posts["cityName"]) && empty($posts["postCode"]) && empty($posts["dept"])) {
+                if (empty($posts["cityName"]) || empty($posts["postCode"]) || empty($posts["dept"])) {
                     throw new Exception ("le nom, le code postal et le departement sont nécessaires à l'enregistrement");
                 }else{
-                    $result=$this->getDatabase()->select("villes_france",[
+                    $result=$this->getDatabase()->select($this->table,[
                         "nom",
                         "code_postal"
                         ],[
                         "nom" => $posts["cityName"],
-                        "code_postal" => $posts["postCode"]
+                        "code_postal [~]" => $posts["postCode"]
                         ]);
                     if($result){
                         throw new Exception ("Cet enregistrement existe déjà");
                     }else{
-                        $result=$this->getDatabase()->insert("villes_france",[
+                        $result=$this->getDatabase()->insert($this->table,[
                             "departement" => $posts["dept"],
                             "nom" => $posts["cityName"],
                             "code_postal" => $posts["postCode"],
@@ -128,7 +130,29 @@ class CitiesManager extends Model{
             }
     }
 
-    public function updateCityByPostCode($code,$id){
+    public function updateCityWithPostCode($code,$posts){
+
+        $this->getCitiesByPostCode($code);
+
+        if(count($this->cities)>1){
+            return $this->cities;
+        }else{
+            $result=$this->getDatabase()->update($this->table,[
+                "departement" => $posts["dept"],
+                "nom" => $posts["cityName"],
+                "code_postal" => $posts["postCode"],
+                "canton" => $posts["canton"],
+                "population" => $posts["population"],
+                "densite" => $posts["density"],
+                "surface" => $posts["area"]
+            ],[
+                "id" => $this->cities->getId()
+            ]);
+            return $result;
+        }
+    }
+
+    public function updateCityByPostPostCodeWithID($code,$id){
         // reflechir à la solution pour 2 villes ou plus qui ont le même code postal
         // Un selectCityToUpdate avant pour obtenir l'id ?
     }
