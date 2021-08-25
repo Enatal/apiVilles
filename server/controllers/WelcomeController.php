@@ -73,4 +73,7 @@ class WelcomeController
          require_once ("Tests/post.php");
     }
 
+    public function testPut(){
+        require_once ("Tests/put.php");
+   }
 }

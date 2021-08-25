@@ -171,6 +171,11 @@ try
                             $controller = new WelcomeController();
                             $controller->testPost();
                             break;
+                        
+                        case 'put.php' :
+                            $controller = new WelcomeController();
+                            $controller->testPut();
+                            break;
                 // route chargée par défaut si aucune autre route n'a été chargée
                     default:
                         throw new Exception("La page n'existe pas");
