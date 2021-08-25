@@ -103,14 +103,21 @@ try
                         $controller->display_user($id_user);
                         break;
                     
-                    // endpoint /ville/{code_postal}
+                    // endpoint /ville/{code_postal} /ville{code_postal}/{id}
                     case "ville":
                         if(array_key_exists(1,$url)){
-                            if(count(str_split($url[1]))==5 && is_numeric($url[1])){
-                                $controller = new CitiesController();
-                                $controller->outputCitiesByPostCode($url[1]);
+                            if(array_key_exists(2,$url)){
+                                if(is_numeric($url[2])){
+                                    $controller = new CitiesController();
+                                    $controller->outputCityByid($url[2]);
+                                }
                             }else{
-                                throw new Exception("le code postal est composé de 5 chiffres");
+                                if(count(str_split($url[1]))==5 && is_numeric($url[1])){
+                                    $controller = new CitiesController();
+                                    $controller->outputCitiesByPostCode($url[1]);
+                                }else{
+                                    throw new Exception("le code postal est composé de 5 chiffres");
+                                }
                             }
                         }else{
                             throw new Exception("requête incomplète");
@@ -219,17 +226,30 @@ try
                  $url = explode("/", filter_var($_GET['page'], FILTER_SANITIZE_URL));
                  // on regarde le premier élément de la route
                  switch ($url[0]) 
-                 {
+                 {   
+                     // endpoint PUT /ville/{code_postal} et /ville/{code_postal}/{id}
                      case "ville":
                         if(array_key_exists(1,$url)){
-                            if(count(str_split($url[1]))==5 && is_numeric($url[1])){
-                                $_PUT = array();
-                                parse_str(file_get_contents('php://input'), $_PUT);
-                                $controller = new CitiesController();
-                                $controller->ModifyCitiesByPostCode($url[1],$_PUT);
+                            if(array_key_exists(2,$url)){
+                                if(is_numeric($url[2])){
+                                    $_PUT = array();
+                                    parse_str(file_get_contents('php://input'), $_PUT);
+                                    $controller = new CitiesController();
+                                    $controller->ModifyCitiesById($url[2],$_PUT);
+                                }else{
+                                    throw new Exception ("L'identifiant est comosé de chiffres"); 
+                                }
                             }else{
-                                throw new Exception("le code postal est composé de 5 chiffres");
+                                if(count(str_split($url[1]))==5 && is_numeric($url[1])){
+                                    $_PUT = array();
+                                    parse_str(file_get_contents('php://input'), $_PUT);
+                                    $controller = new CitiesController();
+                                    $controller->ModifyCitiesByPostCode($url[1],$_PUT);
+                                }else{
+                                    throw new Exception("le code postal est composé de 5 chiffres");
+                                }
                             }
+                            
                         }else{
                             throw new Exception("requête incomplète");
                         }

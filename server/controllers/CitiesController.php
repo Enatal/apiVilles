@@ -19,6 +19,12 @@ class CitiesController{
   
     }
 
+    public function outputCityByid($id){
+
+        $city=$this->cityManager->getCityById($id);
+        echo json_encode($city);
+    }
+
     public function outputPopulationsByPostCode($code){
 
         $cities=$this->cityManager->getPopulationsByPostCode($code);
@@ -48,6 +54,7 @@ class CitiesController{
   
     }
     public function recordNewCity($posts){
+
         $result = $this->cityManager->addNewCity($posts);
         echo json_encode($result->rowCount());
     }
@@ -57,6 +64,12 @@ class CitiesController{
         $result=$this->cityManager-> updateCityWithPostCode($code,$posts);
         echo json_encode($result);
 
+    }
+
+    public function ModifyCitiesById($id,$posts){
+
+        $result=$this->cityManager-> updateCityById($id,$posts);
+        echo json_encode($result);
     }
 }
 ?>
