@@ -9,15 +9,9 @@ class CitiesManager extends Model{
 
         // Considering this project uses DB_MANAGER == MEEDOO
         $cities=$this->getDatabase()->select("villes_france","*",[
-<<<<<<< HEAD
             "code_postal[~]" => htmlspecialchars($code)
         ]);
         //var_dump($cities);
-=======
-            "code_postal" => $code
-        ]);
-        var_dump($cities);
->>>>>>> 93382c091b2fbe2d8ab788bed10c9e36b173172c
         foreach ($cities as $city) {
             $new_city=new City(
                 $city["id"],
@@ -31,24 +25,17 @@ class CitiesManager extends Model{
             );
             $this->cities[$new_city->getId()]= $new_city->_toJson();
         }
-<<<<<<< HEAD
         return $this->cities;
-=======
-        var_dump($this->cities);
-        return $this->cities;
-        
->>>>>>> 93382c091b2fbe2d8ab788bed10c9e36b173172c
+
      }
 
     public function getCitiesByDept($dept){
 
         // Considering this project uses DB_MANAGER == MEEDOO
         $cities=$city=$this->getDatabase()->select("villes_france","*",[
-<<<<<<< HEAD
+
             "departement" => htmlspecialchars($dept)
-=======
-            "departement" => $dept
->>>>>>> 93382c091b2fbe2d8ab788bed10c9e36b173172c
+
         ]);
         foreach ($cities as $city) {
             $new_city=new City(
