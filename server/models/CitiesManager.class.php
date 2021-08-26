@@ -153,7 +153,6 @@ class CitiesManager extends Model{
 
     public function updateCityWithPostCode($code,$posts){
         if(!exists($posts,$this->keys)){
-            var_dump($posts);
             throw new Exception(" Un des champs (cityName, postCode, dept, canton, population, density, area) n'existe pas, à noter qu'ils peuvent être vide, mais doivent exister");
         }else{
             $this->getCitiesByPostCode($code);

@@ -8,7 +8,7 @@
                         $check++;
                 }
             }
-            if($check == count($array)){
+            if($check == count($keys)){
                 return true;
             }else{
                 return false;
