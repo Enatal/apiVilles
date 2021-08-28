@@ -50,7 +50,7 @@ class CitiesController{
     public function getCitiesByCantonInDept($dept,$canton){
 
         $cities=$this->cityManager->getCitiesByCantonInDept($dept,$canton);
-        echo json_encode($cities);
+        echo json_encode($cities,JSON_FORCE_OBJECT);
   
     }
     public function recordNewCity($posts){

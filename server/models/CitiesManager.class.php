@@ -92,6 +92,8 @@ class CitiesManager extends Model{
             foreach ($this->cities as $city) {
             $populations[$city["id"]]=array("population" => $city["population"]);
             }
+        }else{
+            $populations = NULL;
         }
          return $populations;
      }
@@ -100,8 +102,12 @@ class CitiesManager extends Model{
          
         $areas=array();
         $this->getCitiesByPostCode($code);
-        foreach ($this->cities as $city) {
-            $areas[$city["id"]]=array("area" => $city["area"]);
+        if(empty($this->cities)){
+            $areas=NULL;
+        }else{
+            foreach ($this->cities as $city) {
+                $areas[$city["id"]]=array("area" => $city["area"]);
+            }
         }
          return $areas;
     }
@@ -114,6 +120,9 @@ class CitiesManager extends Model{
             if($city["canton"]==$canton){
                 $cities[$city["id"]]=$city;
             }
+        }
+        if(empty($cities)){
+            $cities=NULL;
         }
         return $cities;
     }
@@ -130,20 +139,20 @@ class CitiesManager extends Model{
                         "nom",
                         "code_postal"
                         ],[
-                        "nom" => $posts["cityName"],
-                        "code_postal [~]" => $posts["postCode"]
+                        "nom" => htmlspecialchars($posts["cityName"]),
+                        "code_postal [~]" => htmlspecialchars($posts["postCode"])
                         ]);
                     if($result){
                         throw new Exception ("Cet enregistrement existe déjà");
                     }else{
                         $result=$this->getDatabase()->insert($this->table,[
-                            "departement" => $posts["dept"],
-                            "nom" => $posts["cityName"],
-                            "code_postal" => $posts["postCode"],
-                            "canton" => $posts["canton"],
-                            "population" => $posts["population"],
-                            "densite" => $posts["density"],
-                            "surface" => $posts["area"]
+                            "departement" => htmlspecialchars($posts["dept"]),
+                            "nom" => htmlspecialchars($posts["cityName"]),
+                            "code_postal" => htmlspecialchars($posts["postCode"]),
+                            "canton" => htmlspecialchars($posts["canton"]),
+                            "population" => htmlspecialchars($posts["population"]),
+                            "densite" => htmlspecialchars($posts["density"]),
+                            "surface" => htmlspecialchars($posts["area"])
                         ]);
                         return $result;
                     }
@@ -186,15 +195,15 @@ class CitiesManager extends Model{
                         $posts["area"] = $city["surface"];
                     }
                     $result=$this->getDatabase()->update($this->table,[
-                        "departement" => $posts["dept"],
-                        "nom" => $posts["cityName"],
-                        "code_postal" => $posts["postCode"],
-                        "canton" => $posts["canton"],
-                        "population" => $posts["population"],
-                        "densite" => $posts["density"],
-                        "surface" => $posts["area"]
+                        "departement" => htmlspecialchars($posts["dept"]),
+                        "nom" => htmlspecialchars($posts["cityName"]),
+                        "code_postal" => htmlspecialchars($posts["postCode"]),
+                        "canton" => htmlspecialchars($posts["canton"]),
+                        "population" => htmlspecialchars($posts["population"]),
+                        "densite" => htmlspecialchars($posts["density"]),
+                        "surface" => htmlspecialchars($posts["area"])
                     ],[
-                        "code_postal" => $code
+                        "code_postal" => htmlspecialchars($code)
                     ]);
                     return $posts;
                 }
@@ -236,15 +245,15 @@ class CitiesManager extends Model{
                         $posts["area"] = $city["surface"];
                     }
                     $result=$this->getDatabase()->update($this->table,[
-                        "departement" => $posts["dept"],
-                        "nom" => $posts["cityName"],
-                        "code_postal" => $posts["postCode"],
-                        "canton" => $posts["canton"],
-                        "population" => $posts["population"],
-                        "densite" => $posts["density"],
-                        "surface" => $posts["area"]
+                        "departement" => htmlspecialchars($posts["dept"]),
+                        "nom" => htmlspecialchars($posts["cityName"]),
+                        "code_postal" => htmlspecialchars($posts["postCode"]),
+                        "canton" => htmlspecialchars($posts["canton"]),
+                        "population" => htmlspecialchars($posts["population"]),
+                        "densite" => htmlspecialchars($posts["density"]),
+                        "surface" => htmlspecialchars($posts["area"])
                     ],[
-                        "id" => $id
+                        "id" => htmlspecialchars($id)
                     ]);
                     return $posts;
                 
