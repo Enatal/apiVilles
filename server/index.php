@@ -237,7 +237,7 @@ try
                                     $controller = new CitiesController();
                                     $controller->ModifyCitiesById($url[2],$_PUT);
                                 }else{
-                                    throw new Exception ("L'identifiant est comosé de chiffres"); 
+                                    throw new Exception ("L'identifiant est composé de chiffres"); 
                                 }
                             }else{
                                 if(count(str_split($url[1]))==5 && is_numeric($url[1])){
