@@ -174,15 +174,15 @@ try
                             throw new Exception("requête incomplète");
                         }
                         break;
-                        case 'post.php' :
-                            $controller = new WelcomeController();
-                            $controller->testPost();
-                            break;
-                        
-                        case 'put.php' :
-                            $controller = new WelcomeController();
-                            $controller->testPut();
-                            break;
+                    case 'post.php' :
+                        $controller = new WelcomeController();
+                        $controller->testPost();
+                        break;
+                    
+                    case 'put.php' :
+                        $controller = new WelcomeController();
+                        $controller->testPut();
+                        break;
                 // route chargée par défaut si aucune autre route n'a été chargée
                     default:
                         throw new Exception("La page n'existe pas");
@@ -237,7 +237,7 @@ try
                                     $controller = new CitiesController();
                                     $controller->ModifyCitiesById($url[2],$_PUT);
                                 }else{
-                                    throw new Exception ("L'identifiant est comosé de chiffres"); 
+                                    throw new Exception ("L'identifiant est composé de chiffres"); 
                                 }
                             }else{
                                 if(count(str_split($url[1]))==5 && is_numeric($url[1])){

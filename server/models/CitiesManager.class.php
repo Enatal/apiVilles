@@ -92,6 +92,8 @@ class CitiesManager extends Model{
             foreach ($this->cities as $city) {
             $populations[$city["id"]]=array("population" => $city["population"]);
             }
+        }else{
+            $populations = NULL;
         }
          return $populations;
      }
@@ -100,8 +102,12 @@ class CitiesManager extends Model{
          
         $areas=array();
         $this->getCitiesByPostCode($code);
-        foreach ($this->cities as $city) {
-            $areas[$city["id"]]=array("area" => $city["area"]);
+        if(empty($this->cities)){
+            $areas=NULL;
+        }else{
+            foreach ($this->cities as $city) {
+                $areas[$city["id"]]=array("area" => $city["area"]);
+            }
         }
          return $areas;
     }
@@ -110,9 +116,13 @@ class CitiesManager extends Model{
 
         $this->getCitiesByDept($dept);
         $cities=array();
-        foreach ($this->cities as $city) {
-            if($city["canton"]==$canton){
-                $cities[$city["id"]]=$city;
+        if(empty($this->cities)){
+            $cities=NULL;
+        }else{
+            foreach ($this->cities as $city) {
+                if($city["canton"]==$canton){
+                    $cities[$city["id"]]=$city;
+                }
             }
         }
         return $cities;
@@ -130,20 +140,20 @@ class CitiesManager extends Model{
                         "nom",
                         "code_postal"
                         ],[
-                        "nom" => $posts["cityName"],
-                        "code_postal [~]" => $posts["postCode"]
+                        "nom" => htmlspecialchars($posts["cityName"]),
+                        "code_postal [~]" => htmlspecialchars($posts["postCode"])
                         ]);
                     if($result){
                         throw new Exception ("Cet enregistrement existe déjà");
                     }else{
                         $result=$this->getDatabase()->insert($this->table,[
-                            "departement" => $posts["dept"],
-                            "nom" => $posts["cityName"],
-                            "code_postal" => $posts["postCode"],
-                            "canton" => $posts["canton"],
-                            "population" => $posts["population"],
-                            "densite" => $posts["density"],
-                            "surface" => $posts["area"]
+                            "departement" => htmlspecialchars($posts["dept"]),
+                            "nom" => htmlspecialchars($posts["cityName"]),
+                            "code_postal" => htmlspecialchars($posts["postCode"]),
+                            "canton" => htmlspecialchars($posts["canton"]),
+                            "population" => htmlspecialchars($posts["population"]),
+                            "densite" => htmlspecialchars($posts["density"]),
+                            "surface" => htmlspecialchars($posts["area"])
                         ]);
                         return $result;
                     }
@@ -165,13 +175,13 @@ class CitiesManager extends Model{
                     //print_r($this->city);
                     $city=$this->getCityById(array_key_first($this->cities));
                     if(empty($posts["dept"])){
-                        $posts["dept"] = $city["departement"];
+                        $posts["dept"] = $city["dept"];
                     }
                     if(empty($posts["cityName"])){
-                        $posts["cityName"] = $city["nom"];
+                        $posts["cityName"] = $city["cityName"];
                     }
                     if(empty($posts["postCode"])){
-                        $posts["postCode"] = $city["code_postal"];
+                        $posts["postCode"] = $city["postCode"];
                     }
                     if(empty($posts["canton"])){
                         $posts["canton"] = $city["canton"];
@@ -180,23 +190,23 @@ class CitiesManager extends Model{
                         $posts["population"] = $city["population"];
                     }
                     if(empty($posts["density"])){
-                        $posts["density"] = $city["densite"];
+                        $posts["density"] = $city["density"];
                     }
                     if(empty($posts["area"])){
-                        $posts["area"] = $city["surface"];
+                        $posts["area"] = $city["area"];
                     }
                     $result=$this->getDatabase()->update($this->table,[
-                        "departement" => $posts["dept"],
-                        "nom" => $posts["cityName"],
-                        "code_postal" => $posts["postCode"],
-                        "canton" => $posts["canton"],
-                        "population" => $posts["population"],
-                        "densite" => $posts["density"],
-                        "surface" => $posts["area"]
+                        "departement" => htmlspecialchars($posts["dept"]),
+                        "nom" => htmlspecialchars($posts["cityName"]),
+                        "code_postal" => htmlspecialchars($posts["postCode"]),
+                        "canton" => htmlspecialchars($posts["canton"]),
+                        "population" => htmlspecialchars($posts["population"]),
+                        "densite" => htmlspecialchars($posts["density"]),
+                        "surface" => htmlspecialchars($posts["area"])
                     ],[
-                        "code_postal" => $code
+                        "code_postal" => htmlspecialchars($code)
                     ]);
-                    return $posts;
+                    return $this->getCityById($city["id"]);
                 }
             }
         }
@@ -214,39 +224,39 @@ class CitiesManager extends Model{
             if($city == NULL){
                 throw new Exception ("Cet enregistrement n'existe pas");
             }else{
-                    if(empty($posts["dept"])){
-                        $posts["dept"] = $city["departement"];
-                    }
-                    if(empty($posts["cityName"])){
-                        $posts["cityName"] = $city["nom"];
-                    }
-                    if(empty($posts["postCode"])){
-                        $posts["postCode"] = $city["code_postal"];
-                    }
-                    if(empty($posts["canton"])){
-                        $posts["canton"] = $city["canton"];
-                    }
-                    if(empty($posts["population"])){
-                        $posts["population"] = $city["population"];
-                    }
-                    if(empty($posts["density"])){
-                        $posts["density"] = $city["densite"];
-                    }
-                    if(empty($posts["area"])){
-                        $posts["area"] = $city["surface"];
-                    }
+                if(empty($posts["dept"])){
+                    $posts["dept"] = $city["dept"];
+                }
+                if(empty($posts["cityName"])){
+                    $posts["cityName"] = $city["cityName"];
+                }
+                if(empty($posts["postCode"])){
+                    $posts["postCode"] = $city["postCode"];
+                }
+                if(empty($posts["canton"])){
+                    $posts["canton"] = $city["canton"];
+                }
+                if(empty($posts["population"])){
+                    $posts["population"] = $city["population"];
+                }
+                if(empty($posts["density"])){
+                    $posts["density"] = $city["density"];
+                }
+                if(empty($posts["area"])){
+                    $posts["area"] = $city["area"];
+                }
                     $result=$this->getDatabase()->update($this->table,[
-                        "departement" => $posts["dept"],
-                        "nom" => $posts["cityName"],
-                        "code_postal" => $posts["postCode"],
-                        "canton" => $posts["canton"],
-                        "population" => $posts["population"],
-                        "densite" => $posts["density"],
-                        "surface" => $posts["area"]
+                        "departement" => htmlspecialchars($posts["dept"]),
+                        "nom" => htmlspecialchars($posts["cityName"]),
+                        "code_postal" => htmlspecialchars($posts["postCode"]),
+                        "canton" => htmlspecialchars($posts["canton"]),
+                        "population" => htmlspecialchars($posts["population"]),
+                        "densite" => htmlspecialchars($posts["density"]),
+                        "surface" => htmlspecialchars($posts["area"])
                     ],[
-                        "id" => $id
+                        "id" => htmlspecialchars($id)
                     ]);
-                    return $posts;
+                    return $this->getCityById($id);
                 
             }
         }

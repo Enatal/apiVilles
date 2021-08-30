@@ -1,6 +1,6 @@
 <?php
   $url = 'http://127.0.0.1/apiVilles/server/ville';
-  $data = array('dept' => '83', 'cityName' => 'Gothamcity', 'postCode' => '83605', 'canton' => '22', 'population' => '1', 'density' =>'50', 'area' =>'50');
+  $data = array('dept' => '83', 'cityName' => 'Gothamcity', 'postCode' => '83609', 'canton' => '22', 'population' => '5', 'density' =>'50', 'area' =>'50');
   $options = array(
     'http' => array(
       'header'  => "Content-type: application/x-www-form-urlencoded\r\n",

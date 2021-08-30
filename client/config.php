@@ -7,8 +7,7 @@
     Comments: fichier client d'interaction avec l'api REST
 */
 
-$client="localhost"; //nom d'utilisateur du client
-$apiKey="gWw6p.U)32"; // clé d'api du client
+
 $apiUrl="localhost/api/server"; // url de l'api distante
 
 ?>
